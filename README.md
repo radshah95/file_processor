@@ -26,10 +26,9 @@ Flexibly extract structured data from PDFs, Office documents, images and more, p
 ---
 
 ## 1. Features
-
 • Accepts any file supported by [Docling](https://pypi.org/project/docling/) (currently PDF tested) \n
 • Transforms the document to HTML, then asks Azure OpenAI to return only the fields you need. \n
-• Fully async (Quart + Hypercorn).\n
+• Fully async (Quart + Hypercorn). \n
 • Stateless micro-service—ideal for serverless or container deployment. \n
 • One-shot JSON schema: you choose which columns come back. \n
 
