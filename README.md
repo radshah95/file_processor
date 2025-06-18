@@ -194,14 +194,21 @@ Happy parsing! ü•≥
 The current implementation intentionally keeps the service surface small and opinionated.
 Key assumptions baked into the design are:
 
-• PDF ONLY - PDF is the **only** file type guaranteed to work end-to-end; it is assumed the input file is a PDF. I do not check for this right now so it will just error out.\n
-• LARGE FILE = LONGER PROCESS TIME -The larger the file, the longer the call will take. Average PDF of 10 mb is already taking 1 - 1.5 minutes to process. Assume the call has a timeout set of > 10 minutes\n
-• MODEL CONTEXT LIMIT -`DocumentConverter.convert()` always emits well-formed HTML that fits within the prompt window of the configured Azure OpenAI model. It is assumed right now that the content ouput will fit the context window of the available model.\n
-• AZURE OPEN AI ONLY - An Azure OpenAI deployment with function-calling / JSON-mode support is available (e.g. `gpt-4o-mini`, `gpt-4.1-mini`). The model must support structured output. Right now there is only support of Azure OpenAI models.\n
-• VALID JSON SCHEMA - The schema supplied by the caller is valid JSON and every `type` field maps through `_TYPE_MAP`.\n
-• ONE CALL, ONE FILE - One request = one file. No batching or page-splitting logic exists at the API level. But because this is a basic endpoint, additional code can be built around to handle other use cases.\n
-• TMP STORAGE REQUIRED - The service is stateless; temporary artefacts are written to `tmp/` and removed immediately after use. Docling requires a physical file to be written to drive to be processed (or a url somewhere)\n
-• SECURITY IS AFTERTHOUGHT - Security is not a concern right now. There is no built-in server-side authentication or safety measures.\n
+• PDF ONLY - PDF is the **only** file type guaranteed to work end-to-end; it is assumed the input file is a PDF. I do not check for this right now so it will just error out.
+
+• LARGE FILE = LONGER PROCESS TIME -The larger the file, the longer the call will take. Average PDF of 10 mb is already taking 1 - 1.5 minutes to process. Assume the call has a timeout set of > 10 minutes
+
+• MODEL CONTEXT LIMIT -`DocumentConverter.convert()` always emits well-formed HTML that fits within the prompt window of the configured Azure OpenAI model. It is assumed right now that the content ouput will fit the context window of the available model.
+
+• AZURE OPEN AI ONLY - An Azure OpenAI deployment with function-calling / JSON-mode support is available (e.g. `gpt-4o-mini`, `gpt-4.1-mini`). The model must support structured output. Right now there is only support of Azure OpenAI models.
+
+• VALID JSON SCHEMA - The schema supplied by the caller is valid JSON and every `type` field maps through `_TYPE_MAP`.
+
+• ONE CALL, ONE FILE - One request = one file. No batching or page-splitting logic exists at the API level. But because this is a basic endpoint, additional code can be built around to handle other use cases.
+
+• TMP STORAGE REQUIRED - The service is stateless; temporary artefacts are written to `tmp/` and removed immediately after use. Docling requires a physical file to be written to drive to be processed (or a url somewhere)
+
+• SECURITY IS AFTERTHOUGHT - Security is not a concern right now. There is no built-in server-side authentication or safety measures.
 
 ---
 
