@@ -1,4 +1,4 @@
-# üìÑ File Processor API
+# 📄 File Processor API
 
 Flexibly extract structured data from PDFs, Office documents, images and more, powered by Azure OpenAI and Docling.
 
