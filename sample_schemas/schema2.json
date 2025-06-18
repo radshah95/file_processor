@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Category",
+    "type": "string",
+    "desc": "The category or type of income or expense"
+  },
+  {
+    "name": "2011",
+    "type": "number",
+    "desc": "The amount in 2011, positive for income and negative for costs or losses"
+  },
+  {
+    "name": "2010_rested",
+    "type": "number",
+    "desc": "The amount in 2010 restated, positive for income and negative for costs or losses"
+  }
+]
