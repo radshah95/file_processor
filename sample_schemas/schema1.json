@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Date",
+    "type": "string",
+    "desc": "The date of the transaction. Format: YYYY-MM-DD"
+  },
+  {
+    "name": "Type",
+    "type": "string",
+    "desc": "The type of transaction, Either Buy or Sell"
+  },
+  {
+    "name": "Ticker",
+    "type": "string",
+    "desc": "The shortname for the company"
+  },
+  {
+    "name": "Quantity",
+    "type": "number",
+    "desc": "The number amount bought"
+  },
+  {
+    "name": "Price",
+    "type": "number",
+    "desc": "The dollar amount spent"
+  },
+  {
+    "name": "Cost_Basis",
+    "type": "number",
+    "desc": "The basis of the cost, found to the right of the price"
+  },
+  {
+    "name": "Proceeds",
+    "type": "number",
+    "desc": "The proceeds of the cost, found to the right of Cost Basis"
+  },
+  {
+    "name": "Gain_Loss",
+    "type": "number",
+    "desc": "The gain or loss amount found to the right of Proceeds"
+  }
+]
