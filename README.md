@@ -193,7 +193,7 @@ Happy parsing! ü•≥
 The current implementation intentionally keeps the service surface small and opinionated.
 Key assumptions baked into the design are:
 
-• PDF ONLY - PDF is the **only** file type guaranteed to work end-to-end; it is assumed the input file is a PDF. I do not check for this right now so it will just error out.
+• PDF ONLY - PDF is the **only** file type guaranteed to work end-to-end; it is assumed the input file is a PDF. I do not check for this right now so it will just error out.\n
 • LARGE FILE = LONGER PROCESS TIME -The larger the file, the longer the call will take. Average PDF of 10 mb is already taking 1 - 1.5 minutes to process. Assume the call has a timeout set of > 10 minutes
 • MODEL CONTEXT LIMIT -`DocumentConverter.convert()` always emits well-formed HTML that fits within the prompt window of the configured Azure OpenAI model. It is assumed right now that the content ouput will fit the context window of the available model.
 • AZURE OPEN AI ONLY - An Azure OpenAI deployment with function-calling / JSON-mode support is available (e.g. `gpt-4o-mini`, `gpt-4.1-mini`). The model must support structured output. Right now there is only support of Azure OpenAI models.
