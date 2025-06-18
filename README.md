@@ -24,7 +24,7 @@ Flexibly extract structured data from PDFs, Office documents, images and more, p
 ---
 
 ## 1. Features
-• Accepts any file supported by [Docling](https://pypi.org/project/docling/) (PDF, DOCX, PPTX, XLSX, images, …).
+• Accepts any file supported by [Docling](https://pypi.org/project/docling/) (PDF, DOCX, PPTX, XLSX, images, …). (Right now only PDF!)
 • Transforms the document to HTML, then asks Azure OpenAI to return only the fields you need.
 • Fully async (Quart + Hypercorn).
 • Stateless micro-service—ideal for serverless or container deployment.
