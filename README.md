@@ -1,4 +1,7 @@
-# 📄 File Processor API
+Below is the complete, updated `README.md`, now containing the new **Assumptions** and **Improvements / Road-map** sections and an expanded table of contents.
+
+```markdown
+# üìÑ File Processor API
 
 Flexibly extract structured data from PDFs, Office documents, images and more, powered by Azure OpenAI and Docling.
 
@@ -20,11 +23,13 @@ Flexibly extract structured data from PDFs, Office documents, images and more, p
 8.  Troubleshooting & tips
 9.  Contributing
 10. License
+11. Assumptions
+12. Improvements / Road-map
 
 ---
 
 ## 1. Features
-• Accepts any file supported by [Docling](https://pypi.org/project/docling/) (Right now just PDF support)
+• Accepts any file supported by [Docling](https://pypi.org/project/docling/) (currently PDF tested)
 • Transforms the document to HTML, then asks Azure OpenAI to return only the fields you need.
 • Fully async (Quart + Hypercorn).
 • Stateless micro-service—ideal for serverless or container deployment.
@@ -86,8 +91,8 @@ Extracts structured data according to a user-supplied schema.
 
 • Content-Type: `multipart/form-data`
 • Body parts
-&nbsp;&nbsp;• `file` – the document
-&nbsp;&nbsp;• `schema` – JSON text defining expected columns (see §6)
+  • `file` – the document
+  • `schema` – JSON text defining expected columns (see §6)
 
 • Success response: `200 OK` + JSON object produced by the LLM.
 • Error response: `500` + `{ "Error": ..., "Debug": ... }`
@@ -116,8 +121,7 @@ Response:
       "Cost_Basis": 8271.00,
       "Proceeds": 0,
       "Gain_Loss": -123.45
-    },
-    ...
+    }
   ]
 }
 ```
@@ -136,9 +140,8 @@ Response:
 ]
 ```
 
-Supported primitive types are mapped to JSON Schema types (`string`, `number`, `integer`, `boolean`).
-
-The backend converts this to the OpenAI function-calling/JSON Mode schema automatically; you don’t need to know that detail.
+Supported primitive types map to JSON Schema types (`string`, `number`, `integer`, `boolean`).
+The backend converts this to the OpenAI function-calling / JSON-mode schema automatically; you don’t need to know that detail.
 
 ---
 
@@ -181,4 +184,42 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 ## 10. License
 This project is licensed under the MIT License – see LICENSE for details.
 
-Happy parsing! 🥳
+Happy parsing! ü•≥
+
+---
+
+## 11. Assumptions
+
+The current implementation intentionally keeps the service surface small and opinionated.
+Key assumptions baked into the design are:
+
+• PDF ONLY - PDF is the **only** file type guaranteed to work end-to-end; it is assumed the input file is a PDF. I do not check for this right now so it will just error out.
+• LARGE FILE = LONGER PROCESS TIME -The larger the file, the longer the call will take. Average PDF of 10 mb is already taking 1 - 1.5 minutes to process. Assume the call has a timeout set of > 10 minutes
+• MODEL CONTEXT LIMIT -`DocumentConverter.convert()` always emits well-formed HTML that fits within the prompt window of the configured Azure OpenAI model. It is assumed right now that the content ouput will fit the context window of the available model.
+• AZURE OPEN AI ONLY - An Azure OpenAI deployment with function-calling / JSON-mode support is available (e.g. `gpt-4o-mini`, `gpt-4.1-mini`). The model must support structured output. Right now there is only support of Azure OpenAI models.
+• VALID JSON SCHEMA - The schema supplied by the caller is valid JSON and every `type` field maps through `_TYPE_MAP`.
+• ONE CALL, ONE FILE - One request = one file. No batching or page-splitting logic exists at the API level. But because this is a basic endpoint, additional code can be built around to handle other use cases.
+• TMP STORAGE REQUIRED - The service is stateless; temporary artefacts are written to `tmp/` and removed immediately after use. Docling requires a physical file to be written to drive to be processed (or a url somewhere)
+• SECURITY IS AFTERTHOUGHT - Security is not a concern right now. There is no built-in server-side authentication or safety measures.
+
+---
+
+## 12. Improvements / Road-map
+
+Planned or desirable upgrades:
+
+1. **Multi-format support** – Enable and test Word, PowerPoint, image and email ingestion paths already available in Docling. Need to write the code to support multiple file types.
+2. **Multiple File Conversion Options/Endponts** - Integrate more libraries as backup/secondary options of file processing like MarkerPDF or ImageMagick
+2. **Multiple model support** - Include a proxy library like LiteLLM to make the solution model agnostic (as long as the model supports structured output, it can work).
+3. **Large-document handling** – Add automatic chunking / windowing to stay within Azure OpenAI token limits, then merge partial JSON responses.
+4. **Schema validation & feedback** – Return clear errors if the provided schema is invalid (unsupported type, missing fields, etc.).
+5. **Streaming output** – Stream the LLM response (`text/event-stream`) for faster perceived latency on big documents.
+6. **Offline batch processing** - If not streaming, at least offload the request to a offline pipeline that can take longer to process larger documents and then notify users of available output. We are hitting the upper limits of what is considered acceptable from a REST API response time
+7. **Server-side Authentication & quota management** – API-key header, JWT or OAuth flow plus rate-limiting middleware.
+8. **Observability** – Structured logging (JSON), request/response metrics and OpenTelemetry traces.
+9. **Testing** – Use `pytest` + async test client to cover routes and model calls with fixtures/mocks.
+10. **Retry / back-off strategy for Azure** – Gracefully recover from transient 502/429 errors with exponential back-off.
+11. **Better Configurable tmp storage** – Allow an external volume or in-memory FS (e.g. `/dev/shm`) for faster I/O and better security. Lever cloud storage like S3.
+
+Community PRs for any of the above are most welcome! 🚀
+```
